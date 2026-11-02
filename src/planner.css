@@ -1,0 +1,27 @@
+#clock { font-size: 22px; font-weight: 900; font-style: italic; color: #fff; text-shadow: 0 0 10px var(--cyan); margin-bottom: 4px; }
+.day-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.day-title { font-size: 30px; font-weight: 900; font-style: italic; text-transform: uppercase; color: #fff; text-shadow: 0 0 2px #fff, 0 0 12px var(--pink); margin-right: auto; }
+.progress { height: 10px; border-radius: 6px; background: #0d0620; border: 1px solid var(--line); overflow: hidden; margin: 6px 0 14px; }
+.progress > div { height: 100%; background: var(--grad); box-shadow: 0 0 10px var(--pink); transition: width .3s; }
+.day-grid { display: grid; grid-template-columns: 1fr 340px; gap: 16px; }
+.quick-add { display: grid; grid-template-columns: 1fr 110px 120px 150px 130px auto; gap: 8px; margin-bottom: 12px; }
+.task { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); background: #170b30; margin-bottom: 8px; border-left: 4px solid var(--pc); }
+.task.done { opacity: .55; } .task.done .t-title { text-decoration: line-through; }
+.task input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--pink); flex: none; }
+.t-time { min-width: 52px; font-weight: 900; color: var(--yellow); font-style: italic; }
+.t-title { flex: 1; font-weight: 600; font-size: 16px; }
+.t-meta { font-size: 12px; color: var(--dim); display: flex; gap: 6px; align-items: center; }
+.badge { padding: 1px 7px; border-radius: 10px; border: 1px solid var(--line2); font-size: 11.5px; color: var(--cyan); }
+.badge.cat { color: var(--yellow); border-color: #ffd31a66; }
+.task.overdue .t-time { color: var(--pink); text-shadow: 0 0 6px var(--pink); }
+.month-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.mh { text-align: center; font-size: 12px; letter-spacing: 2px; color: var(--cyan); text-transform: uppercase; padding: 4px; }
+.mc { min-height: 96px; padding: 6px 8px; border-radius: 8px; border: 1px solid var(--line); background: #170b30; cursor: pointer; overflow: hidden; }
+.mc:hover { border-color: var(--cyan); box-shadow: 0 0 10px #2de2ff44; }
+.mc.other { opacity: .35; } .mc.today { border-color: var(--pink); box-shadow: 0 0 12px #ff2e9766; }
+.mc .dn { font-weight: 900; font-style: italic; }
+.mc .mt { font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
+.mc .mt.done { text-decoration: line-through; color: var(--dim); }
+.week-day { padding: 12px 14px; margin-bottom: 12px; }
+.week-day h3 { margin: 0 0 8px; cursor: pointer; }
+.week-day h3:hover { color: var(--cyan); }

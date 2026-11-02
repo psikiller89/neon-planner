@@ -1,0 +1,20 @@
+{
+  "name": "neon-planner",
+  "productName": "Neon Planner",
+  "version": "0.1.0",
+  "description": "Neon Odyssey-styled daily planner and reminders for Linux.",
+  "main": "main.js",
+  "author": "psikiller89 <psikiller89@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/psikiller89/neon-planner",
+  "desktopName": "neon-planner.desktop",
+  "scripts": { "start": "electron .", "dist": "electron-builder --linux AppImage" },
+  "build": {
+    "appId": "com.psikiller89.neonplanner",
+    "productName": "Neon Planner",
+    "files": ["main.js", "preload.js", "src/**/*"],
+    "linux": { "target": ["AppImage"], "category": "Office", "icon": "build/icon.png", "syncDesktopName": true },
+    "artifactName": "Neon-Planner-${version}.AppImage"
+  },
+  "devDependencies": { "electron": "^37.10.3", "electron-builder": "^26.0.0" }
+}
