@@ -11,11 +11,11 @@ let win = null, tray = null, quitting = false, data = null;
 if (!app.requestSingleInstanceLock()) app.quit();
 app.on("second-instance", () => showWindow());
 
-function blank() { return { version: 1, tasks: [], notes: {}, fired: {}, settings: { autostart: false } }; }
+function blank() { return { version: 1, tasks: [], notes: {}, fired: {}, settings: { autostart: false }, meals: {}, recipes: [], shopping: {} }; }
 function load() {
   try { data = fs.existsSync(FILE) ? JSON.parse(fs.readFileSync(FILE, "utf8")) : blank(); }
   catch { fs.copyFileSync(FILE, `${FILE}.corrupt-${Date.now()}`); data = blank(); }
-  data.tasks ??= []; data.notes ??= {}; data.fired ??= {}; data.settings ??= { autostart: false };
+  data.tasks ??= []; data.notes ??= {}; data.fired ??= {}; data.settings ??= { autostart: false }; data.meals ??= {}; data.recipes ??= []; data.shopping ??= {};
 }
 function persist() {
   fs.mkdirSync(DIR, { recursive: true });

@@ -34,7 +34,7 @@ function fmtDay(k) { return parse(k).toLocaleDateString([], { weekday: "long", m
 function go(view, o = {}) { Object.assign(ui, { view }, o); render(); }
 function render() {
   $$(".nav").forEach(b => b.classList.toggle("active", b.dataset.view === ui.view || (ui.view === "day" && b.dataset.view === "day")));
-  $("#campaignName").textContent = { day: ui.day === ymd(new Date()) ? "Today" : fmtDay(ui.day), week: "Next 7 days", month: "Calendar", settings: "Settings" }[ui.view];
+  $("#campaignName").textContent = { day: ui.day === ymd(new Date()) ? "Today" : fmtDay(ui.day), week: "Next 7 days", month: "Calendar", meals: "Meal Planner", settings: "Settings" }[ui.view];
   const v = VIEWS[ui.view]; $("#view").innerHTML = v.html(); v.mount?.($("#view")); updateNext();
 }
 function updateNext() {
@@ -96,8 +96,8 @@ VIEWS.day = {
           <select id="qX" class="input">${REPEAT.map(([key, l]) => `<option value="${key}">${l}</option>`).join("")}</select>
           <button class="btn primary" id="qAdd">+ Add</button></div>
         ${list.map(t => taskRow(t, k)).join("") || `<div class="empty big">Nothing planned. Add your first task above.</div>`}
-      </div><div class="panel" style="padding:14px"><h3 class="panel-title">Notes for the day</h3>
-        <textarea id="dNotes" class="input" rows="18" placeholder="Ideas, journal, shopping list…">${esc(db.notes[k] || "")}</textarea></div></div>`;
+      </div><div>${mealsTodayPanel(k)}<div class="panel" style="padding:14px"><h3 class="panel-title">Notes for the day</h3>
+        <textarea id="dNotes" class="input" rows="18" placeholder="Ideas, journal, shopping list…">${esc(db.notes[k] || "")}</textarea></div></div></div>`;
   },
   mount(r) {
     $("#dPrev", r).onclick = () => go("day", { day: addDays(ui.day, -1) }); $("#dNext", r).onclick = () => go("day", { day: addDays(ui.day, 1) });
@@ -109,6 +109,7 @@ VIEWS.day = {
       if (remind != null && !time) toast("Add a time so the reminder can fire.");
       save(); render(); $("#qT").focus(); };
     $("#qAdd", r).onclick = add; $("#qT", r).onkeydown = e => { if (e.key === "Enter") add(); };
+    $("#mtOpen", r).onclick = () => go("meals", { mealTab: "week", mealWeek: weekStart(ui.day) });
     bindTasks(r, ui.day);
   }
 };
@@ -152,17 +153,17 @@ VIEWS.settings = {
     $("#sTest", r).onclick = async () => toast((await window.planner.testNotify()) ? "Test notification sent" : "Notifications aren't supported on this desktop");
     $("#sAuto", r).onchange = async e => { await window.planner.setAutostart(e.target.checked); db.settings.autostart = e.target.checked; toast(e.target.checked ? "Will start at login" : "Won't start at login"); };
     $("#sExp", r).onclick = async () => { const p = await window.planner.exportData(db); if (p) toast("Exported to " + p); };
-    $("#sImp", r).onclick = async () => { if (!confirm("Replace your current planner with the imported file?")) return; const d = await window.planner.importData(); if (d) { db = d; render(); toast("Imported"); } };
+    $("#sImp", r).onclick = async () => { if (!confirm("Replace your current planner with the imported file?")) return; const d = await window.planner.importData(); if (d) { db = d; db.meals ??= {}; db.recipes ??= []; db.shopping ??= {}; render(); toast("Imported"); } };
   }
 };
 function tick() { const n = new Date(); $("#clock").textContent = `${pad(n.getHours())}:${pad(n.getMinutes())}`; if (ymd(n) !== tick.last) { tick.last = ymd(n); if (ui.view !== "settings") render(); } else updateNext(); }
 async function init() {
   db = await window.planner.load();
-  db.tasks ??= []; db.notes ??= {}; db.settings ??= { autostart: false };
+  db.tasks ??= []; db.notes ??= {}; db.settings ??= { autostart: false }; db.meals ??= {}; db.recipes ??= []; db.shopping ??= {};
   window.planner.onExternalChange(d => { db.fired = d.fired; });
   $$(".nav").forEach(b => b.onclick = () => go(b.dataset.view, b.dataset.view === "day" ? { day: ymd(new Date()) } : {}));
   document.addEventListener("keydown", e => { if (e.key === "Escape") $("#modal").classList.add("hidden"); });
   $("#modal").addEventListener("mousedown", e => { if (e.target.id === "modal") $("#modal").classList.add("hidden"); });
   render(); tick(); setInterval(tick, 15000);
 }
-init();
+document.addEventListener("DOMContentLoaded", init);

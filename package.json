@@ -1,7 +1,7 @@
 {
   "name": "neon-planner",
   "productName": "Neon Planner",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Neon Odyssey-styled daily planner and reminders for Linux.",
   "main": "main.js",
   "author": "psikiller89 <psikiller89@gmail.com>",
